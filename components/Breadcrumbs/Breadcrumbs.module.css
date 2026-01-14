@@ -1,0 +1,30 @@
+.navContainer {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.navList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navItem {
+  margin-right: 10px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #0070f3;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.navSeparator {
+  margin: 0 5px;
+  color: #888;
+}
