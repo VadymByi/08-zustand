@@ -4,12 +4,11 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Toaster, toast } from 'react-hot-toast';
 import { useDebounce } from 'use-debounce';
+import Link from 'next/link';
 
 import css from './NotesPage.module.css';
 import NoteList from '@/components/NoteList/NoteList';
 import Pagination from '@/components/Pagination/Pagination';
-import Modal from '@/components/Modal/Modal';
-import NoteForm from '@/components/NoteForm/NoteForm';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import MonkeyLoader from '@/components/MonkeyLoader/MonkeyLoader';
 
@@ -25,7 +24,6 @@ type NotesClientProps = {
 
 export default function NotesClient({ tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
-  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [showMonkey, setShowMonkey] = useState(false);
 
   const [searchInput, setSearchInput] = useState(() => {
@@ -58,7 +56,9 @@ export default function NotesClient({ tag }: NotesClientProps) {
   }, [data, debouncedSearch]);
 
   useEffect(() => {
-    setPage(1);
+    if (page !== 1) {
+      setPage(1);
+    }
   }, [tag]);
 
   return (
@@ -68,30 +68,27 @@ export default function NotesClient({ tag }: NotesClientProps) {
       <header className={css.toolbar}>
         <SearchBox
           value={searchInput}
-          onChange={value => {
-            setSearchInput(value);
+          onChange={val => {
+            setSearchInput(val);
             setPage(1);
-            localStorage.setItem('notes-search', value);
+            localStorage.setItem('notes-search', val);
           }}
         />
 
         {data && data.totalPages > 1 && (
-          <Pagination totalPages={data.totalPages} currentPage={page} onPageChange={setPage} />
+          <Pagination
+            totalPages={data.totalPages}
+            currentPage={page}
+            onPageChange={p => setPage(p)}
+          />
         )}
 
-        <button className={css.button} onClick={() => setIsFormModalOpen(true)}>
+        <Link href="/notes/action/create" className={css.button}>
           Create note +
-        </button>
+        </Link>
       </header>
 
       {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
-
-      {isFormModalOpen && (
-        <Modal onClose={() => setIsFormModalOpen(false)}>
-          {' '}
-          <NoteForm onClose={() => setIsFormModalOpen(false)} />
-        </Modal>
-      )}
 
       <MonkeyLoader show={showMonkey} duration={MONKEY_DURATION} />
     </div>
