@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title,
       description,
-      url: `https://notehub.com${currentPath}`,
+      url: `https://08-zustand-qlb4javdi-vadymbyis-projects.vercel.app/${currentPath}`,
       type: 'website',
       images: [
         {
